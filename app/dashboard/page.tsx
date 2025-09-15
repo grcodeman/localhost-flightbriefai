@@ -4,7 +4,7 @@ import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faSearch } from "@fortawesome/free-solid-svg-icons";
 import FlightBriefLogo from "@/components/FlightBriefLogo";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // Example reports data
 const exampleReports = [
@@ -48,6 +48,20 @@ const exampleReports = [
 
 export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [showTestingLink, setShowTestingLink] = useState(false);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // Show testing link with Ctrl+Shift+T (or Cmd+Shift+T on Mac)
+      if ((event.ctrlKey || event.metaKey) && event.shiftKey && event.key === 'T') {
+        event.preventDefault();
+        setShowTestingLink(prev => !prev);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 to-blue-100 dark:from-gray-900 dark:to-blue-900">
@@ -101,13 +115,26 @@ export default function Dashboard() {
             </div>
 
             {/* Create Button */}
-            <Link
-              href="/report"
-              className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white text-sm font-medium rounded-md shadow-sm transition-colors duration-200"
-            >
-              <FontAwesomeIcon icon={faPlus} className="mr-2" />
-              Create
-            </Link>
+            <div className="flex items-center space-x-2">
+              <Link
+                href="/report"
+                className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white text-sm font-medium rounded-md shadow-sm transition-colors duration-200"
+              >
+                <FontAwesomeIcon icon={faPlus} className="mr-2" />
+                Create
+              </Link>
+              
+              {/* Hidden Testing Link */}
+              {showTestingLink && (
+                <Link
+                  href="/cookie"
+                  className="inline-flex items-center px-3 py-2 bg-gray-600 hover:bg-gray-700 text-white text-xs font-medium rounded-md shadow-sm transition-colors duration-200 opacity-75"
+                  title="Cookie Testing Page (Ctrl+Shift+T to toggle)"
+                >
+                  🍪 Test
+                </Link>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -124,29 +151,35 @@ export default function Dashboard() {
           </div>
           
           <div className="divide-y divide-gray-200 dark:divide-gray-700">
-            {exampleReports.map((report) => (
-              <div key={report.id} className="px-6 py-4 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition-colors duration-150">
-                <div className="flex items-center justify-between">
-                  <div className="flex-1">
-                    <h4 className="text-sm font-medium text-gray-900 dark:text-white">
-                      {report.name}
-                    </h4>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                      {report.type}
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-sm text-gray-900 dark:text-white">
-                      {new Date(report.date).toLocaleDateString('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                        year: 'numeric'
-                      })}
-                    </p>
+            {exampleReports
+              .filter(report => 
+                searchQuery === "" || 
+                report.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                report.type.toLowerCase().includes(searchQuery.toLowerCase())
+              )
+              .map((report) => (
+                <div key={report.id} className="px-6 py-4 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition-colors duration-150">
+                  <div className="flex items-center justify-between">
+                    <div className="flex-1">
+                      <h4 className="text-sm font-medium text-gray-900 dark:text-white">
+                        {report.name}
+                      </h4>
+                      <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                        {report.type}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-sm text-gray-900 dark:text-white">
+                        {new Date(report.date).toLocaleDateString('en-US', {
+                          month: 'short',
+                          day: 'numeric',
+                          year: 'numeric'
+                        })}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
           </div>
         </div>
       </div>
