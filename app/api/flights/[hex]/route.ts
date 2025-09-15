@@ -50,9 +50,7 @@ export async function GET(
       hex,
       days,
       timezone,
-      summary,
-      count: flightData.length,
-      flightDetails: flightData
+      summary
     });
     
   } catch (error) {
