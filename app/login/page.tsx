@@ -2,8 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlane } from "@fortawesome/free-solid-svg-icons";
+import FlightBriefLogo from "@/components/FlightBriefLogo";
 import { useState } from "react";
 
 export default function Login() {
@@ -24,9 +23,9 @@ export default function Login() {
           {/* Logo and Title */}
           <div className="text-center mb-8">
             <div className="flex justify-center mb-4">
-              <FontAwesomeIcon 
-                icon={faPlane} 
-                className="text-4xl text-blue-600 dark:text-blue-400 transform rotate-45"
+              <FlightBriefLogo 
+                size="lg"
+                className="text-blue-600 dark:text-blue-400"
               />
             </div>
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">

@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlane } from "@fortawesome/free-solid-svg-icons";
+import FlightBriefLogo from "@/components/FlightBriefLogo";
 
 export default function Home() {
   return (
@@ -9,9 +8,9 @@ export default function Home() {
         {/* Logo and Title */}
         <div className="space-y-4">
           <div className="flex justify-center">
-            <FontAwesomeIcon 
-              icon={faPlane} 
-              className="text-6xl text-blue-600 dark:text-blue-400 transform rotate-45"
+            <FlightBriefLogo 
+              size="xl"
+              className="text-blue-600 dark:text-blue-400 w-24 h-24"
             />
           </div>
           <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
