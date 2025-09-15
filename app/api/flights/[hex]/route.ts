@@ -1,5 +1,33 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getFlightHistoryByHex, summarizeFlights } from '../../../../lib/services/opensky';
+import OpenAI from 'openai'
+
+const helper = async (summary: string[]) => {
+  const jsonString = JSON.stringify(summary);
+  const client = new OpenAI({
+    baseURL: "https://api.studio.nebius.com/v1/",
+    apiKey: process.env.NEBIUS_API_KEY,
+  });
+
+  const response = await client.chat.completions.create({
+    model: "deepseek-ai/DeepSeek-V3-0324-fast",
+    max_tokens: 3951,
+    temperature: 0.3,
+    top_p: 0.95,
+    messages: [
+      {
+        role: "user",
+        content: [
+          {
+            type: "text",
+            text: promptGen(jsonString),
+          },
+        ],
+      },
+    ],
+  });
+  return response.choices[0].message.content;
+};
 
 export async function GET(
   request: NextRequest,
@@ -44,13 +72,15 @@ export async function GET(
     }
     
     // Return formatted summary
-    const summary = summarizeFlights(flightData, timezone, decimals);
+    const summary = summarizeFlights(flightData, timezone, decimals);    
+    const htmlReponse = await helper(summary)
     
     return NextResponse.json({
       hex,
       days,
       timezone,
-      summary
+      summary,
+      htmlReponse
     });
     
   } catch (error) {
