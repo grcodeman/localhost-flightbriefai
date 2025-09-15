@@ -9,15 +9,33 @@ export default function Report() {
   const [reportData, setReportData] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const handleProcess = () => {
-    if (!aircraftId.trim()) return;
+  const handleProcess = async () => {
+    const hexId = aircraftId.trim();
+    if (!hexId) return;
     
     setIsProcessing(true);
-    // Simulate processing - in the future this will call your LLM
-    setTimeout(() => {
-      setReportData(`Processing aircraft: ${aircraftId}\n\nReport data will appear here...`);
+    setReportData("Fetching flight data...");
+    
+    try {
+      // Call the OpenSky API
+      const response = await fetch(`/api/flights/${hexId}?days=14&format=summary`);
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || `API Error: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      
+      // Display the JSON response in a formatted way
+      setReportData(JSON.stringify(data, null, 2));
+      
+    } catch (error) {
+      console.error('Error fetching flight data:', error);
+      setReportData(`Error: ${error instanceof Error ? error.message : 'Failed to fetch flight data'}\n\nPlease check that the ICAO24 hex code is valid (6 characters, e.g., 'ab0356')`);
+    } finally {
       setIsProcessing(false);
-    }, 2000);
+    }
   };
 
   return (
@@ -61,7 +79,7 @@ export default function Report() {
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-6">
           <div className="mb-4">
             <label htmlFor="aircraft-id" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Aircraft Tail Number or Hex ID
+              ICAO24 Hex Code
             </label>
             <div className="flex gap-3">
               <input
@@ -69,7 +87,7 @@ export default function Report() {
                 type="text"
                 value={aircraftId}
                 onChange={(e) => setAircraftId(e.target.value)}
-                placeholder="e.g., N123AB or A1B2C3"
+                placeholder="e.g., ab0356 (6 hex characters)"
                 className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
               />
               <button
