@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getFlightHistoryByHex, summarizeFlights } from '../../../../lib/services/opensky';
 import OpenAI from 'openai'
+import { promptGen } from './prompt';
 
 const helper = async (summary: string[]) => {
   const jsonString = JSON.stringify(summary);
