@@ -1,0 +1,6 @@
+export const promptGen = (jsonString: string) => {
+  return (
+    "Generate a pre-sale flight report for the sales rep using the inputs below:\n\n- Follow the exact format shown in the template. \n- Render the final result as clean HTML. \n- Do not include any extra explanations, markdown, or code fences — output only the HTML.\n- Do NOT wrap the response in markdown code fences (no ```html). \n- Do NOT use escaped \\n characters. \n- Output must be valid HTML elements only. \n- No extra explanations, text, or markdown outside of the HTML.\n\nTemplate:\n```\n1) Recent Operations ({days} days)\n**Trip log (condensed)** — _list 8–12 most recent legs. Local dates; one line each._\n- {YYYY‑MM‑DD} — {ORIGIN ICAO} → {DEST ICAO} ({hh:mm}) {(Callsign)}\n\n**Patterns**\n- **Top routes / repeats / busiest weekdays / dwell times** (standard industry KPIs)\n\n&gt; If origin/dest unknown or privacy‑blocked, show aggregates only. [S4][S5]\n4) Utilization &amp; Cues\n- **Hours (period):** {#} • **Cycles (period):** {#} • **% legs &gt;500 nm:** {%} [S3][S9]\n- **International ops:** {Yes/No}\n- **Home‑base guess:** {field}\n- **Notes:** {e.g., frequent quick turns; overnight stays}\n```\n\n" +
+    `inputs: ${jsonString}`
+  );
+};
