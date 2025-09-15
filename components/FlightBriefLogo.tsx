@@ -57,46 +57,34 @@ export default function FlightBriefLogo({ className = "", size = "md" }: FlightB
         />
       </g>
       
-      {/* Airplane Wings */}
+      {/* Airplane Wings - Swept Back */}
       <g transform="rotate(45 50 50)">
-        {/* Left wing */}
-        <ellipse 
-          cx="35" 
-          cy="45" 
-          rx="12" 
-          ry="3" 
+        {/* Left wing - swept back */}
+        <path 
+          d="M 46 45 L 25 40 L 20 42 L 25 47 L 46 47 Z" 
           fill="currentColor"
           opacity="0.9"
         />
         
-        {/* Right wing */}
-        <ellipse 
-          cx="65" 
-          cy="45" 
-          rx="12" 
-          ry="3" 
+        {/* Right wing - swept back */}
+        <path 
+          d="M 54 45 L 75 40 L 80 42 L 75 47 L 54 47 Z" 
           fill="currentColor"
           opacity="0.9"
         />
         
-        {/* Wing details - left */}
-        <ellipse 
-          cx="30" 
-          cy="45" 
-          rx="3" 
-          ry="1" 
+        {/* Wing tips - left */}
+        <path 
+          d="M 20 42 L 18 41 L 22 46 L 25 47 Z" 
           fill="currentColor"
-          opacity="0.6"
+          opacity="0.7"
         />
         
-        {/* Wing details - right */}
-        <ellipse 
-          cx="70" 
-          cy="45" 
-          rx="3" 
-          ry="1" 
+        {/* Wing tips - right */}
+        <path 
+          d="M 80 42 L 82 41 L 78 46 L 75 47 Z" 
           fill="currentColor"
-          opacity="0.6"
+          opacity="0.7"
         />
       </g>
     </svg>
