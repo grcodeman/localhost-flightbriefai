@@ -4,6 +4,14 @@ import Link from "next/link";
 import FlightBriefLogo from "@/components/FlightBriefLogo";
 import { useState } from "react";
 
+export function HtmlRenderer({ html }: { html: string }) {
+  return (
+    <div
+      dangerouslySetInnerHTML={{ __html: html }}
+    />
+  );
+}
+
 export default function Report() {
   const [aircraftId, setAircraftId] = useState("");
   const [reportData, setReportData] = useState("");
@@ -28,7 +36,8 @@ export default function Report() {
       const data = await response.json();
       
       // Display the JSON response in a formatted way
-      setReportData(JSON.stringify(data, null, 2));
+      // setReportData(JSON.stringify(data, null, 2));
+      setReportData(JSON.stringify(data.htmlReponse, null, 2));
       
     } catch (error) {
       console.error('Error fetching flight data:', error);
@@ -45,7 +54,7 @@ export default function Report() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <FlightBriefLogo 
+              <FlightBriefLogo
                 size="md"
                 className="text-blue-600 dark:text-blue-400"
               />
@@ -78,7 +87,10 @@ export default function Report() {
         {/* Input Section */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-6">
           <div className="mb-4">
-            <label htmlFor="aircraft-id" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label
+              htmlFor="aircraft-id"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >
               ICAO24 Hex Code
             </label>
             <div className="flex gap-3">
@@ -106,13 +118,20 @@ export default function Report() {
           <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">
             Report Output
           </h3>
-          <textarea
+          {/* <textarea
             value={reportData}
             readOnly
             placeholder="Report data will appear here after processing..."
             rows={12}
             className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white resize-none"
-          />
+          /> */}
+
+          {HtmlRenderer({
+            html: reportData
+              // .replace(/\\n/g, "")
+              .replace(/^"+|"+$/g, "") // remove leading/trailing quotes
+              .replace(/\\n/g, "<br />"),
+          })}
         </div>
       </div>
     </div>
