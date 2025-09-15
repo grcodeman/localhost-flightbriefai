@@ -12,9 +12,13 @@
     "@fortawesome/fontawesome-svg-core": "^7.0.1",
     "@fortawesome/free-solid-svg-icons": "^7.0.1",
     "@fortawesome/react-fontawesome": "^3.0.0",
+    "firebase": "^12.2.1",
+    "jspdf": "^2.5.1",
     "next": "15.5.3",
     "react": "19.1.0",
-    "react-dom": "19.1.0"
+    "react-dom": "19.1.0",
+    "react-firebase-hooks": "^5.1.1",
+    "windsurf": "^0.0.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
